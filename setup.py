@@ -1,23 +1,37 @@
+import numpy as np
 import os
 
-import numpy as np
+from tflite_model_maker.config import ExportFormat, QuantizationConfig
+from tflite_model_maker import model_spec
+from tflite_model_maker import object_detector
+
+from tflite_support import metadata
 
 import tensorflow as tf
 assert tf.__version__.startswith('2')
 
-from tflite_model_maker import model_spec
-from tflite_model_maker import image_classifier
-from tflite_model_maker.config import ExportFormat
-from tflite_model_maker.config import QuantizationConfig
-from tflite_model_maker.image_classifier import DataLoader
+tf.get_logger().setLevel('ERROR')
+from absl import logging
+logging.set_verbosity(logging.ERROR)
 
-import matplotlib.pyplot as plt
+train_data = object_detector.DataLoader.from_pascal_voc(
+    'dataset/train',
+    'dataset/train',
+    ['00_flower', '00_minion']
+)
 
-data = DataLoader.from_folder('dataset')
-train_data, test_data = data.split(0.8)
+val_data = object_detector.DataLoader.from_pascal_voc(
+    'dataset/validate',
+    'dataset/validate',
+    ['00_flower', '00_minion']
+)
 
-model = image_classifier.create(train_data, epochs=10)
+spec = model_spec.get('efficientdet_lite0')
 
-loss, accuracy = model.evaluate(test_data)
+model = object_detector.create(train_data, model_spec=spec, batch_size=4, train_whole_model=True, epochs=10, validation_data=val_data)
 
-model.export(export_dir='.')
+model.evaluate(val_data)
+
+model.export(export_dir='.', tflite_filename='lite0_10.tflite')
+
+model.evaluate_tflite('lite0_10.tflite', val_data)
