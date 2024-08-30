@@ -6,7 +6,7 @@ Overview
 This project demonstrates how to create and train image classification and object detection models using TensorFlow, Google Colab, and custom datasets. The models are trained using a dataset created with `labelImg`, and the training process is carried out in Google Colab.
 
 Objectives
-- Image Classification**: Classify images into different categories based on their content.
+- Image Classification: Classify images into different categories based on their content.
 - Object Detection**: Detect and label objects within images.
 
 Project Structure
