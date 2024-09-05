@@ -7,7 +7,7 @@ This project demonstrates how to create and train image classification and objec
 
 Objectives
 - Image Classification: Classify images into different categories based on their content.
-- Object Detection**: Detect and label objects within images.
+- Object Detection: Detect and label objects within images.
 
 Project Structure
 - `dataset/`: Contains the labelled images used for training and validation.
